@@ -100,9 +100,13 @@ def get_dist_range(start, end, jumprange):
     web_url2 = 'https://www.edsm.net/api-v1/system?'
     s1 = 'systemName=' + start + '&showCoordinates=1'
     web_url = web_url + s1
+    if (" " in web_url):
+        web_url = web_url.replace(" ","+")
     response = urllib.request.urlopen(web_url)
     s2 = 'systemName=' + end + '&showCoordinates=1'
     web_url2 = web_url2 + s2
+    if (" " in web_url2):
+        web_url2 = web_url2.replace(" ","+")
     response2 = urllib.request.urlopen(web_url2)
     response = str(response.read(), 'utf-8')
     response2 = str(response2.read(), 'utf-8')
@@ -112,6 +116,11 @@ def get_dist_range(start, end, jumprange):
     end_coordx = get_x(response2)
     end_coordy = get_y(response2)
     end_coordz = get_z(response2)
+    distance = round(calc(start_coordx,start_coordy,start_coordz,end_coordx,end_coordy,end_coordz))
+    if ("+" in end):
+      end = end.replace("+", " ")
+    if ("+" in start):
+      start = start.replace("+", " ")
     distance = round(calc(start_coordx,start_coordy,start_coordz,end_coordx,end_coordy,end_coordz))
     jumps = round(float(distance)/float(jumprange))
     return(print('The distance between ' + str(start) + ' and ' + str(end) + ' is ' + str(distance) + 'ly, and it will take ' + str(jumps) + ' jumps with your range of ' + str(jumprange) + 'ly.'))
